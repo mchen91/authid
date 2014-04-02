@@ -1,13 +1,16 @@
 from nltk import ngrams
 import string
 
+# string operators
+punctuationCount = lambda l1, l2: len(list(filter(lambda c: c in l2, l1)))
+
 # util file to figure out which ngrams to use as inputs
 common_ngrams = set()
 author_poems = {'shakespeare': 154, 'spenser': 89, 'philip': 100}
 for auth, num_poems in author_poems.iteritems():
     auth_ngrams = {}
     # spenser only has 89 poems
-    for i in xrange(1, 90):#num_poems + 1):
+    for i in xrange(1, 90):#90 #num_poems + 1):
         with open('{}/{}{}'.format(auth, auth, i), 'r') as f:
             text = ' '.join(line.strip().lower() for line in f)
             text = text.translate(string.maketrans('', ''), string.punctuation)
@@ -25,10 +28,11 @@ for auth, num_poems in author_poems.iteritems():
 csv = open('data.txt', 'w')
 authors = ['shakespeare', 'spenser', 'philip']
 for iden, auth in enumerate(authors, start=1):
-    for i in xrange(1, 90):
+    for i in xrange(1, author_poems[auth]+1):#90 #num_poems + 1):
         all_ngrams = {}
         with open('{}/{}{}'.format(auth, auth, i)) as f:
             text = ' '.join(line.strip().lower() for line in f)
+        puncCount = punctuationCount(text,string.punctuation)
         text = text.translate(string.maketrans('', ''), string.punctuation)
         trigrams = [''.join(i) for i in ngrams(text, 3)]
 
@@ -38,5 +42,6 @@ for iden, auth in enumerate(authors, start=1):
         total = sum(all_ngrams.values())
         freqs = (all_ngrams.get(i, 0) / float(total) for i in common_ngrams)
         csv.write('{},'.format(iden) + ','.join(str(f) for f in freqs))
+        csv.write(', %d' % puncCount)
         csv.write('\n')
 
