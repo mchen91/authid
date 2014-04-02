@@ -1,7 +1,7 @@
 #util file to separate a specially formatted file containing all sonnets
 #into individual files
 auth = 'philip'
-with open('{]/{}.txt'.format(auth, auth), 'r') as f:
+with open('{}/{}.txt'.format(auth, auth), 'r') as f:
     inpoem = False
     pnum = 1
     for line in f:
