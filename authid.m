@@ -6,8 +6,9 @@
 %
 %   inputs - input data.
 %   targets - target data.
-
-data = csvread('~/Documents/authid/data.txt');
+[PATHSTR,NAME,EXT] = fileparts(mfilename('fullpath'));
+fileName =  fullfile(PATHSTR,'data.txt');
+data = csvread(fileName);
 
 % normalize data to between 0 and 1
 normalizer = max(data(:));
