@@ -6,9 +6,9 @@ common_ngrams = set()
 author_poems = {'shakespeare': 154, 'spenser': 89, 'philip': 100}
 for auth, num_poems in author_poems.iteritems():
     auth_ngrams = {}
-    # spenser only has 89 poems
-    for i in xrange(1, 90):#num_poems + 1):
-        with open('{}/{}{}'.format(auth, auth, i), 'r') as f:
+    # duplicate input data
+    for i in xrange(1, max(author_poems.values()) + 1):
+        with open('{}/{}{}'.format(auth, auth, i % num_poems + 1 if i > num_poems else i), 'r') as f:
             text = ' '.join(line.strip().lower() for line in f)
             text = text.translate(string.maketrans('', ''), string.punctuation)
             trigrams = [''.join(i) for i in ngrams(text, 3)]
@@ -23,11 +23,10 @@ for auth, num_poems in author_poems.iteritems():
 
 # second pass over files to create input data
 csv = open('data.txt', 'w')
-authors = ['shakespeare', 'spenser', 'philip']
-for iden, auth in enumerate(authors, start=1):
-    for i in xrange(1, 90):
+for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
+    for i in xrange(1, max(author_poems.values()) + 1):
         all_ngrams = {}
-        with open('{}/{}{}'.format(auth, auth, i)) as f:
+        with open('{}/{}{}'.format(auth, auth, i % num_poems + 1 if i > num_poems else i)) as f:
             text = ' '.join(line.strip().lower() for line in f)
         text = text.translate(string.maketrans('', ''), string.punctuation)
         trigrams = [''.join(i) for i in ngrams(text, 3)]
@@ -39,4 +38,4 @@ for iden, auth in enumerate(authors, start=1):
         freqs = (all_ngrams.get(i, 0) / float(total) for i in common_ngrams)
         csv.write('{},'.format(iden) + ','.join(str(f) for f in freqs))
         csv.write('\n')
-
+csv.close()
