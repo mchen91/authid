@@ -17,15 +17,20 @@ inputs = (transpose(data(:,2:end)) - bias) / (normalizer - bias);
 targets = full(ind2vec(transpose(data(:,1))));
 
 % Create a Pattern Recognition Network
-hiddenLayerSize = 7;
-net = patternnet(hiddenLayerSize);
+hiddenLayerSize = size(inputs,1);
+net = patternnet([25]);
 
 % Setup Division of Data for Training, Validation, Testing
+net.divideFcn = 'dividerand';  % Divide data randomly
+net.divideMode = 'sample';  % Divide up every sample
 net.divideParam.trainRatio = 75/100;
 net.divideParam.valRatio = 0/100;
 net.divideParam.testRatio = 25/100;
 
 % Train the Network
+net.trainFcn = 'trainlm';  % Levenberg-Marquardt
+net.trainParam.min_grad = 0.000000001;
+net.performFcn = 'mse';  % Mean squared error
 [net,tr] = train(net,inputs,targets);
 
 % Test the Network
@@ -33,18 +38,25 @@ outputs = net(inputs);
 errors = gsubtract(targets,outputs);
 performance = perform(net,targets,outputs);
 
+% Recalculate Training, Validation and Test Performance
+trainTargets = targets .* tr.trainMask{1};
+valTargets = targets  .* tr.valMask{1};
+testTargets = targets  .* tr.testMask{1};
+trainPerformance = perform(net,trainTargets,outputs)
+valPerformance = perform(net,valTargets,outputs)
+testPerformance = perform(net,testTargets,outputs)
+
 % View the Network
 %view(net)
 
 % Plots
 % Uncomment these lines to enable various plots.
-%figure, plotperform(tr)
-%figure, plottrainstate(tr)
-%figure, plotconfusion(targets,outputs)
+figure, plotperform(tr)
+% figure, plottrainstate(tr)
+figure, plotconfusion(targets,outputs)
 %figure, plotroc(targets,outputs)
 %figure, ploterrhist(errors)
 
-% Classify new data
 a = data(randi(size(data,1),1),:);
 b = data(randi(size(data,1),1),:);
 c = data(randi(size(data,1),1),:);
@@ -56,4 +68,3 @@ normalized_data = (new_data - bias) / (normalizer - bias);
 y = sim(net, normalized_data);
 [C,I] = max(y);
 I
-expected
