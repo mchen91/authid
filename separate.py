@@ -1,7 +1,7 @@
 #util file to separate a specially formatted file containing all sonnets
 #into individual files
-
-with open('spense', 'r') as f:
+auth = 'philip'
+with open('{]/{}.txt'.format(auth, auth), 'r') as f:
     inpoem = False
     pnum = 1
     for line in f:
@@ -16,7 +16,7 @@ with open('spense', 'r') as f:
         # assume in a new poem
         if not inpoem:
             inpoem = True
-            pfile = open('spense{}'.format(pnum), 'w')
+            pfile = open('{}/{}{}'.format(auth, auth, pnum), 'w')
             pnum += 1
         pfile.write(line)
     pfile.close()

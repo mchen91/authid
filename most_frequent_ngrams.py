@@ -3,7 +3,7 @@ import string
 
 # util file to figure out which ngrams to use as inputs
 all_ngrams = set()
-author_poems = {'shakespeare': 154, 'spenser': 89}
+author_poems = {'shakespeare': 154, 'spenser': 89, 'philip': 100}
 for auth, num_poems in author_poems.iteritems():
     auth_ngrams = {}
     # spenser only has 89 poems
@@ -20,4 +20,4 @@ for auth, num_poems in author_poems.iteritems():
     for ngram, count in auth_ngrams.items():
         if float(count) / total > 0.003:
             all_ngrams.add(ngram)
-    print all_ngrams
+print all_ngrams
