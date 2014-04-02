@@ -30,6 +30,7 @@ net.divideParam.testRatio = 25/100;
 % Train the Network
 net.trainFcn = 'trainlm';  % Levenberg-Marquardt
 net.trainParam.min_grad = 0.000000001;
+net.trainParam.epochs = 250;
 net.performFcn = 'mse';  % Mean squared error
 [net,tr] = train(net,inputs,targets);
 
@@ -61,7 +62,7 @@ a = data(randi(size(data,1),1),:);
 b = data(randi(size(data,1),1),:);
 c = data(randi(size(data,1),1),:);
 new_data = [a;b;c]';
-expected = new_data(1,:);
+expected = new_data(1,:)
 new_data = new_data(2:end,:);
 
 normalized_data = (new_data - bias) / (normalizer - bias);

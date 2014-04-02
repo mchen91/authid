@@ -14,6 +14,10 @@ for auth, num_poems in author_poems.iteritems():
         with open('{}/{}{}'.format(auth, auth, i % num_poems + 1 if i > num_poems else i), 'r') as f:
             text = ' '.join(line.strip().lower() for line in f)
             text = text.translate(string.maketrans('', ''), string.punctuation)
+            # wordList = text.split()
+            # wordLengths=[len(word) for word in wordList] 
+            # averageWordLength = sum(wordLengths)/float(len(wordList))
+            # print averageWordLength
             trigrams = [''.join(i) for i in ngrams(text, 3)]
 
             for t in trigrams:
@@ -32,6 +36,7 @@ for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
         with open('{}/{}{}'.format(auth, auth, i % num_poems + 1 if i > num_poems else i)) as f:
             text = ' '.join(line.strip().lower() for line in f)
         puncCount = punctuationCount(text,string.punctuation)
+        commaPerSentence = float(text.count(',')) / (text.count('.') + text.count('!') + text.count('?'))
         text = text.translate(string.maketrans('', ''), string.punctuation)
         trigrams = [''.join(i) for i in ngrams(text, 3)]
 
@@ -42,5 +47,6 @@ for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
         freqs = (all_ngrams.get(i, 0) / float(total) for i in common_ngrams)
         csv.write('{},'.format(iden) + ','.join(str(f) for f in freqs))
         csv.write(', %d' % puncCount)
+        csv.write(', %f' % commaPerSentence)
         csv.write('\n')
 csv.close()
