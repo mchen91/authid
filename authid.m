@@ -7,7 +7,7 @@
 %   inputs - input data.
 %   targets - target data.
 [PATHSTR,NAME,EXT] = fileparts(mfilename('fullpath'));
-fileName =  fullfile(PATHSTR,'data.txt');
+fileName = fullfile(PATHSTR,'data.txt');
 data = csvread(fileName);
 
 % normalize data to between 0 and 1
@@ -18,7 +18,7 @@ targets = full(ind2vec(transpose(data(:,1))));
 
 % Create a Pattern Recognition Network
 hiddenLayerSize = size(inputs,1);
-net = patternnet([2]);
+net = patternnet([10]);
 
 % Setup Division of Data for Training, Validation, Testing
 net.divideFcn = 'dividerand';  % Divide data randomly
