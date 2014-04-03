@@ -18,7 +18,7 @@ targets = full(ind2vec(transpose(data(:,1))));
 
 % Create a Pattern Recognition Network
 hiddenLayerSize = size(inputs,1);
-net = patternnet([25]);
+net = patternnet([2]);
 
 % Setup Division of Data for Training, Validation, Testing
 net.divideFcn = 'dividerand';  % Divide data randomly
@@ -52,20 +52,20 @@ testPerformance = perform(net,testTargets,outputs)
 
 % Plots
 % Uncomment these lines to enable various plots.
-figure, plotperform(tr)
+% figure, plotperform(tr)
 % figure, plottrainstate(tr)
 figure, plotconfusion(targets,outputs)
 %figure, plotroc(targets,outputs)
 %figure, ploterrhist(errors)
 
-a = data(randi(size(data,1),1),:);
-b = data(randi(size(data,1),1),:);
-c = data(randi(size(data,1),1),:);
-new_data = [a;b;c]';
-expected = new_data(1,:)
-new_data = new_data(2:end,:);
-
-normalized_data = (new_data - bias) / (normalizer - bias);
-y = sim(net, normalized_data);
-[C,I] = max(y);
-I
+% a = data(randi(size(data,1),1),:);
+% b = data(randi(size(data,1),1),:);
+% c = data(randi(size(data,1),1),:);
+% new_data = [a;b;c]';
+% expected = new_data(1,:)
+% new_data = new_data(2:end,:);
+% 
+% normalized_data = (new_data - bias) / (normalizer - bias);
+% y = sim(net, normalized_data);
+% [C,I] = max(y);
+% I

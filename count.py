@@ -25,7 +25,7 @@ for auth, num_poems in author_poems.iteritems():
     total = sum(auth_ngrams.values())
     # for each author, grab the ngrams that appear more than 0.3% of the time
     for ngram, count in auth_ngrams.items():
-        if float(count) / total > 0.0025:
+        if float(count) / total > 0.0025: # if float(count) / total > 0.0025:
             common_ngrams.add(ngram)
 
 # second pass over files to create input data
@@ -35,7 +35,7 @@ for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
         all_ngrams = {}
         with open('{}/{}{}'.format(auth, auth, i % num_poems + 1 if i > num_poems else i)) as f:
             text = ' '.join(line.strip().lower() for line in f)
-        puncCount = punctuationCount(text,string.punctuation)
+        puncCount = punctuationCount(text,string.punctuation)/float(text.count('.') + text.count('!') + text.count('?'))
         commaPerSentence = float(text.count(',')) / (text.count('.') + text.count('!') + text.count('?'))
         text = text.translate(string.maketrans('', ''), string.punctuation)
         trigrams = [''.join(i) for i in ngrams(text, 3)]
@@ -46,7 +46,7 @@ for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
         total = sum(all_ngrams.values())
         freqs = (all_ngrams.get(i, 0) / float(total) for i in common_ngrams)
         csv.write('{},'.format(iden) + ','.join(str(f) for f in freqs))
-        csv.write(', %d' % puncCount)
+        csv.write(', %f' % puncCount)
         csv.write(', %f' % commaPerSentence)
         csv.write('\n')
 csv.close()
