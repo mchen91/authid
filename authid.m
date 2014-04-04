@@ -6,8 +6,10 @@
 %
 %   inputs - input data.
 %   targets - target data.
+close all;
+
 [PATHSTR,NAME,EXT] = fileparts(mfilename('fullpath'));
-fileName = fullfile(PATHSTR,'data.txt');
+fileName = fullfile(PATHSTR,'data2.txt');
 data = csvread(fileName);
 
 % normalize data to between 0 and 1
@@ -18,7 +20,7 @@ targets = full(ind2vec(transpose(data(:,1))));
 
 % Create a Pattern Recognition Network
 hiddenLayerSize = size(inputs,1);
-net = patternnet([10]);
+net = patternnet(40);
 
 % Setup Division of Data for Training, Validation, Testing
 net.divideFcn = 'dividerand';  % Divide data randomly
@@ -54,7 +56,7 @@ testPerformance = perform(net,testTargets,outputs)
 % Uncomment these lines to enable various plots.
 % figure, plotperform(tr)
 % figure, plottrainstate(tr)
-figure, plotconfusion(targets,outputs)
+figure, plotconfusion(testTargets,outputs)
 %figure, plotroc(targets,outputs)
 %figure, ploterrhist(errors)
 

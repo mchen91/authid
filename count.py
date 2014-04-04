@@ -32,7 +32,7 @@ for auth, num_poems in author_poems.iteritems():
             common_ngrams.add(ngram)
 
 # second pass over files to create input data
-csv = open('data.txt', 'w')
+csv = open('data2.txt', 'w')
 for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
     for i in xrange(1, max(author_poems.values()) + 1):
         all_ngrams = {}
@@ -44,8 +44,8 @@ for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
             length = min(longword, len(word.strip(string.punctuation)))
             word_len_freqs[length] += 1
 
-        #puncCount = punctuationCount(text,string.punctuation) / float(text.count('.') + text.count('!') + text.count('?'))
-        #commaPerSentence = thingsPerSentence(',', text)
+        puncCount = punctuationCount(text,string.punctuation) / float(text.count('.') + text.count('!') + text.count('?'))
+        commaPerSentence = punctuationCount(text,',')
         punc_freqs = (float(text.count(p)) / len(text) for p in '.,-;\'"')
         text = text.translate(string.maketrans('', ''), string.punctuation)
         trigrams = [''.join(i) for i in ngrams(text, 3)]
@@ -61,5 +61,9 @@ for iden, (auth, num_poems) in enumerate(author_poems.items(), start=1):
         csv.write(','.join(str(f) for f in len_freqs))
         csv.write(',')
         csv.write(','.join(str(f) for f in punc_freqs))
+        # csv.write(',')
+        # csv.write('%f' % puncCount)
+        # csv.write(',')
+        # csv.write('%f' % commaPerSentence)
         csv.write('\n')
 csv.close()

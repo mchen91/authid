@@ -4,14 +4,14 @@
 fileName2 =  fullfile(PATHSTR2,'authid.m');
 
 
-nodeMax = 5;
-layerMax = 3;
-numTests = 5;
+nodeMax = 10;
+layerMax = 1;
+numTests = 2;
 results = zeros(nodeMax,layerMax,numTests);
 for i=1:nodeMax
     for j=1:layerMax
         for k=1:numTests
-            hiddenLayerSize = (5*i)*ones(1,j);
+            hiddenLayerSize = i*ones(1,j);
             run(fileName2)
             results(i,j,k)=testPerformance;
             close all;
